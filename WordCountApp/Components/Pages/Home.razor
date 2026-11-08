@@ -1,0 +1,38 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Word Counter</PageTitle>
+
+<main class="counter">
+    <h1>Word Counter</h1>
+
+    <label for="text-input">Enter or paste your text</label>
+    <textarea id="text-input"
+              rows="8"
+              placeholder="Start typing..."
+              @bind="Text"
+              @bind:event="oninput"></textarea>
+
+    <dl class="stats">
+        <div>
+            <dt>Words</dt>
+            <dd id="word-count">@WordCount</dd>
+        </div>
+        <div>
+            <dt>Characters</dt>
+            <dd id="char-count">@Text.Length</dd>
+        </div>
+    </dl>
+
+    <button type="button" @onclick="Clear" disabled="@(Text.Length == 0)">Clear</button>
+</main>
+
+@code {
+    private string Text { get; set; } = string.Empty;
+
+    // Words are runs of non-whitespace characters.
+    private int WordCount =>
+        Text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+
+    private void Clear() => Text = string.Empty;
+}
